@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore.Storage.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 
 
@@ -38,7 +39,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
-    internal class AuthService
+    public  class AuthService
     {
 
         private readonly DBConetext _context;
@@ -64,7 +65,7 @@ namespace BLL.Services
             await this._context.Users.AddAsync(user);
             await this._context.SaveChangesAsync();
 
-            var PasswordHash = new PasswordHasher<UserDetails>().HashPassword(user, dto.Password)
+            var PasswordHash = new PasswordHasher<UserDetails>().HashPassword(user, dto.Password);
             var pwdDetails = new PasswordDetails
             {
                             UserId = user.Id,
@@ -99,13 +100,26 @@ namespace BLL.Services
             {
                 return "Invalid Password";
             }
-            var cLaims = new[]
+            var Claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString() ),
                 new Claim(ClaimTypes.Name, user.FirstName  )
             };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
 
-            return "";
+                issuer: this.configuration["Jwt:Issuer"],
+                audience: this.configuration["Jwt:Audience"],
+                claims:Claims,
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(this.configuration["Jwt:DurationInMinutes"]!))  ,
+                signingCredentials: creds
+
+                );
+
+
+            
+            return  new JwtSecurityTokenHandler().WriteToken(token)  ;
         }
     }
 }
