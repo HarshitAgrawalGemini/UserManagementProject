@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "All Users";
+}
+
+<style>
+    body {
+        background: #f2f6fc;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .users-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+        background-color: #3498db;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    @@media (max-width: 768px) {
+        table, thead, tbody, th, td, tr
+
+    {
+        display: block;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    th {
+        display: none;
+    }
+
+    td {
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+        td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 10px;
+            top: 12px;
+            font-weight: bold;
+            color: #555;
+            text-align: left;
+        }
+
+    }
+</style>
+
+<div class="users-container">
+    <h2>All Registered Users</h2>
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>DOB</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    function goToDetails(userId) {
+        window.location.href = `http://127.0.0.1:5020/api/user/profile/${userId}`;
+    }
+
+    function goToUpdate(userId) {
+        window.location.href = `http://127.0.0.1:5020/api/user/update/${userId}`;
+    }
+    async function loadUsers() {
+        try {
+            const response = await fetch("http://127.0.0.1:5020/api/user/Allusers", {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Remove if not using auth
+                }
+            });
+
+            if (!response.ok) throw new Error("Failed to load users");
+
+            const users = await response.json();
+            const tbody = document.querySelector("#usersTable tbody");
+            tbody.innerHTML = "";
+            console.log(users);
+            users.forEach(user => {
+                const row = `
+                    <tr>
+                        <td data-label="ID">${user.id}</td>
+                        <td data-label="First Name">${user.firstName}</td>
+                        <td data-label="Last Name">${user.lastName}</td>
+                        <td data-label="Email">${user.email}</td>
+                        <td data-label="Gender">${user.gender}</td>
+                        <td data-label="DOB">${new Date(user.dob).toLocaleDateString()}</td>
+
+                         <td data-label="Email">
+                <button onclick="goToDetails(${user.id})">Details</button>
+            </td>
+            <td data-label="Gender">
+                <button onclick="goToUpdate(${user.id})">Update</button>
+            </td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML("beforeend", row);
+            });
+
+        } catch (error) {
+            alert("Error loading user list");
+            console.error(error);
+        }
+    }
+
+    loadUsers();
+
+
+</script>

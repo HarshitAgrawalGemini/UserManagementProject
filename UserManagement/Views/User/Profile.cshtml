@@ -1,0 +1,229 @@
+﻿@* @{
+    ViewData["Title"] = "My Profile";
+}
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #f9f9f9;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #333;
+    }
+
+    .profile-field {
+        margin-bottom: 1.2rem;
+    }
+
+        .profile-field label {
+            font-weight: 600;
+            display: block;
+            color: #555;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-field span {
+            font-size: 1.05rem;
+            color: #222;
+        }
+</style>
+
+<div class="profile-container">
+    <h2>My Profile</h2>
+
+    <div class="profile-field">
+        <label>First Name:</label>
+        <span id="firstName"></span>
+    </div>
+
+    <div class="profile-field">
+        <label>Last Name:</label>
+        <span id="lastName"></span>
+    </div>
+
+    <div class="profile-field">
+        <label>Date of Birth:</label>
+        <span id="dob"></span>
+    </div>
+
+    <div class="profile-field">
+        <label>Gender:</label>
+        <span id="gender"></span>
+    </div>
+
+    <div class="profile-field">
+        <label>Email:</label>
+        <span id="email"></span>
+    </div>
+</div>
+
+<script>
+    async function loadProfile() {
+        try {
+            console.log(localStorage.getItem('token') );
+
+            const response = await fetch('http://127.0.0.1:5020/api/user/getprofile', {
+                headers: {
+                    "Accept":"application/json",
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') // if you're using JWT
+                }
+            });
+
+            if (!response.ok) throw new Error("Not authorized or failed to fetch");
+
+            const data = await response.json();
+
+            document.getElementById("firstName").textContent = data.firstName;
+            document.getElementById("lastName").textContent = data.lastName;
+            document.getElementById("dob").textContent = new Date(data.dob).toLocaleDateString();
+            document.getElementById("gender").textContent = data.gender;
+            document.getElementById("email").textContent = data.email;
+
+        } catch (error) {
+            alert("Failed to load profile.");
+            console.error(error);
+        }
+    }
+
+    loadProfile();
+</script> *@
+
+
+
+@model int 
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<style>
+    body {
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .profile-wrapper {
+        max-width: 700px;
+        margin: 60px auto;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        transition: transform 0.3s ease;
+    }
+
+        .profile-wrapper:hover {
+            transform: scale(1.01);
+        }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+
+    .profile-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-label {
+        font-weight: 600;
+        color: #555;
+        flex: 1;
+    }
+
+    .profile-value {
+        flex: 2;
+        color: #2c3e50;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    @@media (max-width: 600px) {
+        .profile-row
+
+    {
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .profile-value {
+        text-align: left;
+        margin-top: 5px;
+    }
+
+    }
+</style>
+
+<div class="profile-wrapper">
+    <h2>User Profile</h2>
+
+    <div class="profile-row">
+        <div class="profile-label">First Name</div>
+        <div class="profile-value" id="firstName"></div>
+    </div>
+
+    <div class="profile-row">
+        <div class="profile-label">Last Name</div>
+        <div class="profile-value" id="lastName"></div>
+    </div>
+
+    <div class="profile-row">
+        <div class="profile-label">Date of Birth</div>
+        <div class="profile-value" id="dob"></div>
+    </div>
+
+    <div class="profile-row">
+        <div class="profile-label">Gender</div>
+        <div class="profile-value" id="gender"></div>
+    </div>
+
+    <div class="profile-row">
+        <div class="profile-label">Email</div>
+        <div class="profile-value" id="email"></div>
+    </div>
+</div>
+
+<script>
+    async function loadProfile() {
+        try {
+            const response = await fetch('http://127.0.0.1:5020/api/user/detail/@Model', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') // use your token key
+                }
+            });
+
+            if (!response.ok) throw new Error("Not authorized or failed to fetch");
+
+            const data = await response.json();
+
+            document.getElementById("firstName").textContent = data.firstName;
+            document.getElementById("lastName").textContent = data.lastName;
+            document.getElementById("dob").textContent = new Date(data.dob).toLocaleDateString();
+            document.getElementById("gender").textContent = data.gender;
+            document.getElementById("email").textContent = data.email;
+
+        } catch (error) {
+            alert("Failed to load profile.");
+            console.error(error);
+        }
+    }
+
+    loadProfile();
+</script>
+

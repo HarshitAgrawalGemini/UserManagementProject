@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BOL.DTOs;
 using BLL.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 
 
 namespace UserManagement.Controllers
 {
     [ApiController]
-    [Route("api/controller")]
+    [Route("api/user")]
     public class UserController : Controller
     {
         private readonly AuthService _authService;
@@ -16,21 +20,119 @@ namespace UserManagement.Controllers
             return View();
         }
 
+
+
+
+
         public UserController(AuthService authService)
         {
             this._authService = authService;
         }
-        [HttpPost("register")]
-        public async Task<IActionResult> Register( RegisterDTO  dto)
+
+
+
+
+
+
+        [HttpPost("/register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDTO  dto)
         {
             var result = await this._authService.RegisterAsync(dto);
+            if ( result == "registered")
+            {
+              return Redirect("api/user/login");
+            }
             return Ok(result);
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO dto)
+
+        [HttpGet("register")]
+        public IActionResult Register()
         {
+            return View();
+        }
+        [HttpGet("login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login ([FromBody] LoginDTO dto)
+        {
+            Console.WriteLine(dto.Password+"  "+dto.Email );
             var result = await  this._authService.LoginAsync(dto);
+            return result !=null?  Ok(result):BadRequest("problem") ;
+        }
+
+
+
+
+
+
+
+
+        [HttpGet("myprofile")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) { 
+            
+            return Unauthorized();
+            
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            var profile = await _authService.GetProfileDTOAsync(userId);
+
+            return profile == null ? NotFound("User not found ") : Ok(profile);
+        }
+
+
+        [HttpGet("ListUser")]
+
+        public   IActionResult UserList()
+        {
+            return View();
+        }
+        [HttpGet("AllUsers")]
+        public async Task<IActionResult> AllUsers()
+        {
+           var users=  await _authService.ListUsers();
+            return Ok(users);
+        }
+
+
+        //[Authorize]
+        [HttpGet("detail/{id}")]
+        public async Task<IActionResult> Profile(int id)
+        {
+            var user = await _authService.GetProfileById(id);
+            Console.WriteLine(user  + " <= user " );
+            return user != null? Ok(user) :BadRequest("user not found")   ;
+        }
+
+
+        //[Authorize]
+        [HttpGet("profile/{id}")]
+
+        public IActionResult UserProfileDetail(int id) {
+
+            return View("Profile",id);
+        }
+
+        [HttpGet("update/{id}")]
+        public IActionResult UpdateProfile(int id)
+        {
+            return View("UpdateUserProfile", id);
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUserProfile(int id, [FromBody] UpdateProfileDTO dto)
+        {
+           string? result = await _authService.UpdateUserProfile( id, dto); 
             return Ok(result);
         }
     }

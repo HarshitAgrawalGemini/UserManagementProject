@@ -1,0 +1,161 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Update Profile";
+}
+
+<style>
+    body {
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .profile-wrapper {
+        max-width: 700px;
+        margin: 60px auto;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    button {
+        width: 100%;
+        background-color: #3498db;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+</style>
+
+<div class="profile-wrapper">
+    <h2>Update Profile</h2>
+
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input id="firstName" type="text" />
+    </div>
+
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" type="text" />
+    </div>
+
+    <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input id="dob" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" />
+    </div>
+
+    <button onclick="updateProfile()">Update</button>
+</div>
+
+<script>
+    async function loadProfile() {
+        try {
+            const response = await fetch('http://127.0.0.1:5020/api/user/detail/@Model', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+
+            if (!response.ok) throw new Error("Failed to load profile");
+
+            const data = await response.json();
+
+            document.getElementById("firstName").value = data.firstName;
+            document.getElementById("lastName").value = data.lastName;
+            document.getElementById("dob").value = data.dob.split('T')[0];
+            document.getElementById("gender").value = data.gender;
+            document.getElementById("email").value = data.email;
+
+        } catch (err) {
+            alert("Error loading profile.");
+            console.error(err);
+        }
+    }
+
+    async function updateProfile() {
+        const updatedData = {
+            id: @Model,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            dob: document.getElementById("dob").value,
+            gender: document.getElementById("gender").value,
+            email: document.getElementById("email").value
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5020/api/user/update/@Model', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(updatedData)
+            });
+
+            if (response.ok) {
+                alert("Profile updated successfully.");
+                window.location.href = "/Home/Index"; // or wherever you want to redirect
+            } else {
+                const err = await response.text();
+                alert("Failed to update profile: " + err);
+            }
+        } catch (error) {
+            alert("Network or server error.");
+            console.error(error);
+        }
+    }
+
+    loadProfile();
+</script>

@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f4f7f8;
+        padding: 2rem;
+    }
+
+    .register-container {
+        max-width: 500px;
+        margin: auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .alert {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        border-radius: 6px;
+        display: none;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+
+<div class="register-container">
+    <h2>User Registration</h2>
+
+    <form id="registerForm">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" required>
+                <option value="">-- Select Gender --</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <div id="alertBox" class="alert"></div>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const data = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            dob: document.getElementById('dob').value,
+            email: document.getElementById('email').value,
+            gender: document.getElementById('gender').value,
+            password: document.getElementById('password').value
+        };
+
+        const alertBox = document.getElementById('alertBox');
+        alertBox.style.display = 'none';
+
+        try {
+            const response = await fetch('http://127.0.0.1:5020/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const msg = await response.text();
+            alertBox.textContent = msg;
+
+            alertBox.className = 'alert ' + (response.ok ? 'alert-success' : 'alert-error');
+            alertBox.style.display = 'block';
+
+            if (response.ok) {
+
+
+                window.location.href = "http://localhost:5020/api/user/login";
+                document.getElementById('registerForm').reset();
+            }
+        } catch (err) {
+            console.error('Request failed:', err);
+            alertBox.textContent = 'Request failed.';
+            alertBox.className = 'alert alert-error';
+            alertBox.style.display = 'block';
+        }
+    });
+</script>
