@@ -100,62 +100,62 @@
 </div>
 
 <script>
-    async function loadProfile() {
-        try {
-            const response = await fetch('http://127.0.0.1:5020/api/user/detail/@Model', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            });
+        async function loadProfile() {
+            try {
+                const response = await fetch('http://127.0.0.1:5020/api/user/detail/@Model', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
 
-            if (!response.ok) throw new Error("Failed to load profile");
+                if (!response.ok) throw new Error("Failed to load profile");
 
-            const data = await response.json();
+                const data = await response.json();
 
-            document.getElementById("firstName").value = data.firstName;
-            document.getElementById("lastName").value = data.lastName;
-            document.getElementById("dob").value = data.dob.split('T')[0];
-            document.getElementById("gender").value = data.gender;
-            document.getElementById("email").value = data.email;
+                document.getElementById("firstName").value = data.firstName;
+                document.getElementById("lastName").value = data.lastName;
+                document.getElementById("dob").value = data.dob.split('T')[0];
+                document.getElementById("gender").value = data.gender;
+                document.getElementById("email").value = data.email;
 
-        } catch (err) {
-            alert("Error loading profile.");
-            console.error(err);
-        }
-    }
-
-    async function updateProfile() {
-        const updatedData = {
-            id: @Model,
-            firstName: document.getElementById("firstName").value,
-            lastName: document.getElementById("lastName").value,
-            dob: document.getElementById("dob").value,
-            gender: document.getElementById("gender").value,
-            email: document.getElementById("email").value
-        };
-
-        try {
-            const response = await fetch('http://127.0.0.1:5020/api/user/update/@Model', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(updatedData)
-            });
-
-            if (response.ok) {
-                alert("Profile updated successfully.");
-                window.location.href = "/Home/Index"; // or wherever you want to redirect
-            } else {
-                const err = await response.text();
-                alert("Failed to update profile: " + err);
+            } catch (err) {
+                alert("Error loading profile.");
+                console.error(err);
             }
-        } catch (error) {
-            alert("Network or server error.");
-            console.error(error);
         }
-    }
 
-    loadProfile();
+        async function updateProfile() {
+            const updatedData = {
+                id: @Model,
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                dob: document.getElementById("dob").value,
+                gender: document.getElementById("gender").value,
+                email: document.getElementById("email").value
+            };
+
+            try {dotent 
+                const response = await fetch('http://127.0.0.1:5020/api/user/update/@Model', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (response.ok) {
+                    alert("Profile updated successfully.");
+                    window.location.href = "/api/user/ListUser"; // or wherever you want to redirect
+                } else {
+                    const err = await response.text();
+                    alert("Failed to update profile: " + err);
+                }
+            } catch (error) {
+                alert("Network or server error.");
+                console.error(error);
+            }
+        }
+
+        loadProfile();
 </script>

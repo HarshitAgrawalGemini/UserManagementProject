@@ -21,6 +21,22 @@
   },
   {
     "ContainingType": "UserManagement.Controllers.UserController",
+    "Method": "DeleteUser",
+    "RelativePath": "api/user/delete/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagement.Controllers.UserController",
     "Method": "Profile",
     "RelativePath": "api/user/detail/{id}",
     "HttpMethod": "GET",

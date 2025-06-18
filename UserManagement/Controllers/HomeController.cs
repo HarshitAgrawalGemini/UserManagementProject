@@ -15,7 +15,7 @@ namespace UserManagement.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Register","User");
         }
 
         public IActionResult Privacy()

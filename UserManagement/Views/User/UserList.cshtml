@@ -9,8 +9,7 @@
     }
 
     .users-container {
-        max-width: 1000px;
-        margin: 40px auto;
+        margin: auto;
         background: #fff;
         padding: 25px;
         border-radius: 12px;
@@ -39,6 +38,7 @@
     th {
         background-color: #3498db;
         color: white;
+        text-align: center
     }
 
     tr:hover {
@@ -46,41 +46,80 @@
     }
 
     @@media (max-width: 768px) {
-        table, thead, tbody, th, td, tr
-
-    {
-        display: block;
-    }
-
-    tr {
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 10px;
-    }
-
-    th {
-        display: none;
-    }
-
-    td {
-        position: relative;
-        padding-left: 50%;
-        text-align: right;
-    }
-
-        td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 10px;
-            top: 12px;
-            font-weight: bold;
-            color: #555;
-            text-align: left;
+        table, thead, tbody, th, td, tr {
+            display: block;
         }
 
+        tr {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        th {
+            display: none;
+        }
+
+        td {
+            position: relative;
+            padding-left: 50%;
+            text-align: right;
+        }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                top: 12px;
+                font-weight: bold;
+                color: #555;
+                text-align: left;
+            }
+    }
+
+
+    .action-btn {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+    .details-btn {
+        background-color: #3498db;
+        color: white;
+    }
+
+        .details-btn:hover {
+            background-color: #2980b9;
+        }
+
+    .update-btn {
+        background-color: #27ae60;
+        color: white;
+    }
+
+        .update-btn:hover {
+            background-color: #1e8449;
+        }
+
+    #Delete-head {
+        background-color: red
+    }
+
+    thead {
+        border-radius: 50px;
+        overflow: clip
     }
 </style>
+
 
 <div class="users-container">
     <h2>All Registered Users</h2>
@@ -93,6 +132,10 @@
                 <th>Email</th>
                 <th>Gender</th>
                 <th>DOB</th>
+                <th>Details</th>
+
+                <th>Update</th>
+                <th id="Delete-head">Delete</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -100,55 +143,81 @@
 </div>
 
 <script>
-    function goToDetails(userId) {
-        window.location.href = `http://127.0.0.1:5020/api/user/profile/${userId}`;
-    }
-
-    function goToUpdate(userId) {
-        window.location.href = `http://127.0.0.1:5020/api/user/update/${userId}`;
-    }
-    async function loadUsers() {
-        try {
-            const response = await fetch("http://127.0.0.1:5020/api/user/Allusers", {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Remove if not using auth
-                }
-            });
-
-            if (!response.ok) throw new Error("Failed to load users");
-
-            const users = await response.json();
-            const tbody = document.querySelector("#usersTable tbody");
-            tbody.innerHTML = "";
-            console.log(users);
-            users.forEach(user => {
-                const row = `
-                    <tr>
-                        <td data-label="ID">${user.id}</td>
-                        <td data-label="First Name">${user.firstName}</td>
-                        <td data-label="Last Name">${user.lastName}</td>
-                        <td data-label="Email">${user.email}</td>
-                        <td data-label="Gender">${user.gender}</td>
-                        <td data-label="DOB">${new Date(user.dob).toLocaleDateString()}</td>
-
-                         <td data-label="Email">
-                <button onclick="goToDetails(${user.id})">Details</button>
-            </td>
-            <td data-label="Gender">
-                <button onclick="goToUpdate(${user.id})">Update</button>
-            </td>
-                    </tr>
-                `;
-                tbody.insertAdjacentHTML("beforeend", row);
-            });
-
-        } catch (error) {
-            alert("Error loading user list");
-            console.error(error);
+        function goToDetails(userId) {
+            window.location.href = `http://127.0.0.1:5020/api/user/profile/${userId}`;
         }
-    }
 
-    loadUsers();
+        function goToUpdate(userId) {
+            window.location.href = `http://127.0.0.1:5020/api/user/update/${userId}`;
+        }
+
+        async function goToDelete(userId){
+
+            try{
+                 const response = await fetch(`http://127.0.0.1:5020/api/user/delete/${userId}`, {
+                        method: 'DELETE',
+                        headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                
+            });
+        // window.location.href = window.location.href;
+                window.location.href = window.location.href;
+
+            }
+            catch(e){
+                console.log(e);
+            }
+        }
+        async function loadUsers() {
+            try {
+                const response = await fetch("http://127.0.0.1:5020/api/user/Allusers", {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token') // Remove if not using auth
+                    }
+                });
+
+                if (!response.ok) throw new Error("Failed to load users");
+
+                const users = await response.json();
+                const tbody = document.querySelector("#usersTable tbody");
+                tbody.innerHTML = "";
+                console.log(users);
+                users.forEach(user => {
+                    const row = `
+                        <tr>
+                            <td data-label="ID">${user.id}</td>
+                            <td data-label="First Name">${user.firstName}</td>
+                            <td data-label="Last Name">${user.lastName}</td>
+                            <td data-label="Email">${user.email}</td>
+                            <td data-label="Gender">${user.gender}</td>
+                            <td data-label="DOB">${new Date(user.dob).toLocaleDateString()}</td>
+
+
+                            <td data-label="Email">
+                                <button class="action-btn details-btn" onclick="goToDetails(${user.id})">Details</button>
+                             </td>
+                            <td data-label="Gender">
+                                <button class="action-btn update-btn" onclick="goToUpdate(${user.id})">Update</button>
+                            </td>
+
+                            <td data-label="Gender">
+                                <button class="action-btn update-btn" style="background-color:red" onclick="goToDelete(${user.id})">Delete</button>
+                            </td>
+
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML("beforeend", row);
+                });
+
+            } catch (error) {
+                alert("Error loading user list");
+                console.error(error);
+            }
+        }
+
+        loadUsers();
 
 
 </script>

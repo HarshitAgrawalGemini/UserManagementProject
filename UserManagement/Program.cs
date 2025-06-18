@@ -5,8 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using System.Net;
+using System.Net.Mail;
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<EmailService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -40,9 +40,9 @@ namespace UserManagement.Controllers
             var result = await this._authService.RegisterAsync(dto);
             if ( result == "registered")
             {
-              return Redirect("api/user/login");
+              return Ok();
             }
-            return Ok(result);
+            return BadRequest(result);
         }
 
 
@@ -134,6 +134,15 @@ namespace UserManagement.Controllers
         {
            string? result = await _authService.UpdateUserProfile( id, dto); 
             return Ok(result);
+        }
+
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            string? result =  await this._authService.DeleteUser(id);
+
+            return  result !=null? Ok(result) :BadRequest("User not Found");
         }
     }
 }

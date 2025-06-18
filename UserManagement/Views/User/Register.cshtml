@@ -116,6 +116,10 @@
         </div>
 
         <button type="submit">Register</button>
+        <div style="text-align:center; margin-top: 1rem;">
+            Already have an account?
+            <a href="http://127.0.0.1:5020/api/user/login" style="color: #007bff; text-decoration: none;">Login</a>
+        </div>
     </form>
 
     <div id="alertBox" class="alert"></div>
@@ -147,7 +151,7 @@
             });
 
             const msg = await response.text();
-            alertBox.textContent = msg;
+            alertBox.textContent ="msg";
 
             alertBox.className = 'alert ' + (response.ok ? 'alert-success' : 'alert-error');
             alertBox.style.display = 'block';
