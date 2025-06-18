@@ -11,6 +11,37 @@
   },
   {
     "ContainingType": "UserManagement.Controllers.UserController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagement.Controllers.UserController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagement.Controllers.UserController",
     "Method": "AllUsers",
     "RelativePath": "api/user/AllUsers",
     "HttpMethod": "GET",
@@ -46,6 +77,22 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagement.Controllers.UserController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/user/forgot",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "BOL.DTOs.ForgotPasswordDTO",
         "IsRequired": true
       }
     ],
@@ -121,6 +168,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagement.Controllers.UserController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/user/reset",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "BOL.DTOs.ResetPasswordDTO",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

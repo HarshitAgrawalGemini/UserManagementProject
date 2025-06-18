@@ -144,5 +144,58 @@ namespace UserManagement.Controllers
 
             return  result !=null? Ok(result) :BadRequest("User not Found");
         }
+
+        //[HttpGet("forgot-password")]
+        //public IActionResult ForgotPassword()
+        //{
+        //    return View("PasswordReset");
+        //}
+
+        //[HttpPost("forgot-password")]
+        //public IActionResult ForgotPassword(ResetPasswordDTO dto)
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost("reset-password")]
+        //public async Task<IActionResult > ResetPassword([FromBody] ResetPasswordDTO)
+        //{
+        //    if (!ModelState.IsValid) { 
+
+        //        return BadRequest(ModelState);
+
+        //    }
+
+
+        //}
+
+        [HttpGet("forgot-password")]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // Show Reset Password form (with token and email from query string)
+        [HttpGet("reset-password")]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            ViewBag.Email = email;
+            ViewBag.Token = token;
+            return View();
+        }
+
+        [HttpPost("forgot")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO dto)
+        {
+            var result = await this._authService.SendResetEmailAsync(dto.Email);
+            return Ok(result);
+        }
+
+        [HttpPost("reset")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
+        {
+            var result = await this._authService.ResetPasswordAsync(dto);
+            return Ok(result);
+        }
     }
 }
