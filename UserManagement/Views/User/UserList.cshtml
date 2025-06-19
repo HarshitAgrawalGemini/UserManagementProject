@@ -172,11 +172,17 @@
         }
         async function loadUsers() {
             try {
-                const response = await fetch("http://127.0.0.1:5020/api/user/Allusers", {
+            token =localStorage.getItem('token');
+            console.log(token);
+            const response = await fetch("http://127.0.0.1:5020/api/user/Allusers", {
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token') // Remove if not using auth
+
+                    "Accept":"application/json",
+                'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' +token // Remove if not using auth
                     }
                 });
+                if (response.status ===401){ window.location.href= "http://127.0.0.1:5020/api/user/login";}
 
                 if (!response.ok) throw new Error("Failed to load users");
 
@@ -214,6 +220,7 @@
             } catch (error) {
                 alert("Error loading user list");
                 console.error(error);
+            window.location.href= "http://127.0.0.1:5020/api/user/login";
             }
         }
 

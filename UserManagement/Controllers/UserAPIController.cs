@@ -47,6 +47,15 @@ namespace UserManagement.Controllers
         }
 
 
+        [HttpGet("AllUsers")]
+        [Authorize]
+        public async Task<IActionResult> AllUsers()
+        {
+            var users = await _userService.ListUsers();
+            return Ok(users);
+        }
+
+
         [HttpGet("myprofile")]
         [Authorize]
         public async Task<IActionResult> GetProfile()
@@ -65,13 +74,9 @@ namespace UserManagement.Controllers
 
             return profile == null ? NotFound("User not found ") : Ok(profile);
         }
-        [HttpGet("AllUsers")]
-        public async Task<IActionResult> AllUsers()
-        {
-            var users = await _userService.ListUsers();
-            return Ok(users);
-        }
+
         [HttpGet("detail/{id}")]
+        [Authorize]
         public async Task<IActionResult> Profile(int id)
         {
             var user = await _userService.GetProfileById(id);
@@ -80,6 +85,7 @@ namespace UserManagement.Controllers
         }
 
         [HttpPut("update/{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUserProfile(int id, [FromBody] UpdateProfileDTO dto)
         {
             string? result = await _userService.UpdateUserProfile(id, dto);
@@ -88,6 +94,7 @@ namespace UserManagement.Controllers
 
 
         [HttpDelete("delete/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             string? result = await this._userService.DeleteUser(id);

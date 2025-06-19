@@ -58,11 +58,18 @@ namespace UserManagement.Controllers
 
 
 
-
+        [HttpGet("AllUsers")]
+        [Authorize]
+        public async Task<IActionResult> AllUsers()
+        {
+            var users = await _userService.ListUsers();
+            return Ok(users);
+        }
 
 
 
         [HttpGet("ListUser")]
+        //[Authorize]
 
         public   IActionResult UserList()
         {
