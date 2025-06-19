@@ -175,13 +175,6 @@ namespace UserManagement.Controllers
             return View();
         }
 
-        //[HttpPost("create-password")]
-        //public async Task<IActionResult> CreatePassword([FromBody] ForgotPasswordDTO dto)
-        //{
-        //    var result = await this._authService.SendResetEmailAsync(dto.Email);
-        //    return Ok(result);
-        //}
-
 
         [HttpPost("forgot")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO dto)
