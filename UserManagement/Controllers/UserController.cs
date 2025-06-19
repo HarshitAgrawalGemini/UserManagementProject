@@ -15,6 +15,8 @@ namespace UserManagement.Controllers
     public class UserController : Controller
     {
         private readonly AuthService _authService;
+        private readonly PasswordService _passwordService;
+        private readonly UserService _userService;
         public IActionResult Index()
         {
             return View();
@@ -24,9 +26,11 @@ namespace UserManagement.Controllers
 
 
 
-        public UserController(AuthService authService)
+        public UserController(AuthService authService, PasswordService passwordService, UserService userService)
         {
             this._authService = authService;
+            this._passwordService = passwordService;
+            this._userService = userService;
         }
 
 
@@ -34,20 +38,7 @@ namespace UserManagement.Controllers
 
 
 
-        [HttpPost("/register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO  dto)
-        {
 
-            Console.WriteLine("DTO +> "+dto);
-            
-            var result = await this._authService.RegisterAsync(dto);
-            Console.WriteLine(result);
-            if ( result == "registered")
-            {
-              return Ok();
-            }
-            return BadRequest(result);
-        }
 
 
         [HttpGet("register")]
@@ -61,13 +52,6 @@ namespace UserManagement.Controllers
             return View();
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login ([FromBody] LoginDTO dto)
-        {
-            Console.WriteLine(dto.Password+"  "+dto.Email );
-            var result = await  this._authService.LoginAsync(dto);
-            return result !=null?  Ok(result):BadRequest("problem") ;
-        }
 
 
 
@@ -76,23 +60,6 @@ namespace UserManagement.Controllers
 
 
 
-        [HttpGet("myprofile")]
-        [Authorize]
-        public async Task<IActionResult> GetProfile()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null) { 
-            
-            return Unauthorized();
-            
-            }
-
-            int userId = int.Parse(userIdClaim.Value);
-
-            var profile = await _authService.GetProfileDTOAsync(userId);
-
-            return profile == null ? NotFound("User not found ") : Ok(profile);
-        }
 
 
         [HttpGet("ListUser")]
@@ -101,22 +68,9 @@ namespace UserManagement.Controllers
         {
             return View();
         }
-        [HttpGet("AllUsers")]
-        public async Task<IActionResult> AllUsers()
-        {
-           var users=  await _authService.ListUsers();
-            return Ok(users);
-        }
 
 
         //[Authorize]
-        [HttpGet("detail/{id}")]
-        public async Task<IActionResult> Profile(int id)
-        {
-            var user = await _authService.GetProfileById(id);
-            Console.WriteLine(user  + " <= user " );
-            return user != null? Ok(user) :BadRequest("user not found")   ;
-        }
 
 
         //[Authorize]
@@ -131,22 +85,6 @@ namespace UserManagement.Controllers
         public IActionResult UpdateProfile(int id)
         {
             return View("UpdateUserProfile", id);
-        }
-
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateUserProfile(int id, [FromBody] UpdateProfileDTO dto)
-        {
-           string? result = await _authService.UpdateUserProfile( id, dto); 
-            return Ok(result);
-        }
-
-
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            string? result =  await this._authService.DeleteUser(id);
-
-            return  result !=null? Ok(result) :BadRequest("User not Found");
         }
 
 
@@ -176,18 +114,6 @@ namespace UserManagement.Controllers
         }
 
 
-        [HttpPost("forgot")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO dto)
-        {
-            var result = await this._authService.SendResetEmailAsync(dto.Email);
-            return Ok(result);
-        }
 
-        [HttpPost("reset")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
-        {
-            var result = await this._authService.ResetPasswordAsync(dto);
-            return Ok(result);
-        }
     }
 }

@@ -11,7 +11,10 @@ using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<AuthService>();
 
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<PasswordService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DBConetext>(options =>
@@ -33,7 +36,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
     });
-builder.Services.AddScoped<AuthService>();
+
 
 builder.Services.AddCors(options =>
 {
