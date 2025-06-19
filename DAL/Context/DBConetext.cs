@@ -25,5 +25,8 @@ namespace DAL.Context
         }
         public DbSet<UserDetails> Users { get; set; }
         public DbSet<PasswordDetails> Passwords { get; set; }
+
+        public DbSet<PasswordResetToken> Tokens { get; set; }
+        public DbSet<EmailVerificationToken> RegisterVerificationTokens { get; set; }
     }
 }

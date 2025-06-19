@@ -1,0 +1,12 @@
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\bin\Debug\net9.0\BOL.deps.json
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\bin\Debug\net9.0\BOL.dll
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\bin\Debug\net9.0\BOL.pdb
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.AssemblyInfoInputs.cache
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.AssemblyInfo.cs
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.csproj.CoreCompileInputs.cache
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.sourcelink.json
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.dll
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\refint\BOL.dll
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\BOL.pdb
+C:\Users\Harshit.Agrawal\Desktop\Dot_Net_work\UserManagement\BOL\obj\Debug\net9.0\ref\BOL.dll

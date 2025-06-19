@@ -128,7 +128,6 @@
 <script>
     document.getElementById('registerForm').addEventListener('submit', async function (e) {
         e.preventDefault();
-
         const data = {
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
@@ -151,7 +150,7 @@
             });
 
             const msg = await response.text();
-            alertBox.textContent ="msg";
+            alertBox.textContent =msg;
 
             alertBox.className = 'alert ' + (response.ok ? 'alert-success' : 'alert-error');
             alertBox.style.display = 'block';

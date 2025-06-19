@@ -18,6 +18,7 @@ namespace BOL.DataBaseEntities
         [Required]
         public DateTime DOB { get; set; }
         [Required]
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.com$", ErrorMessage = "Email-Exception")]
         public string Email { get; set; } = string.Empty;
         [Required]
         public string Gender { get; set; } = string.Empty;

@@ -12,5 +12,6 @@ namespace BOL.DTOs
         public string LastName { get; set; } = string.Empty;
         public DateTime DOB { get; set; }
         public string Gender { get; set; } = string.Empty;
+        public string  Email {  get; set; } = string.Empty;
     }
 }

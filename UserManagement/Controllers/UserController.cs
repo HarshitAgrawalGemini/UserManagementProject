@@ -37,7 +37,11 @@ namespace UserManagement.Controllers
         [HttpPost("/register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO  dto)
         {
+
+            Console.WriteLine("DTO +> "+dto);
+            
             var result = await this._authService.RegisterAsync(dto);
+            Console.WriteLine(result);
             if ( result == "registered")
             {
               return Ok();
@@ -145,29 +149,6 @@ namespace UserManagement.Controllers
             return  result !=null? Ok(result) :BadRequest("User not Found");
         }
 
-        //[HttpGet("forgot-password")]
-        //public IActionResult ForgotPassword()
-        //{
-        //    return View("PasswordReset");
-        //}
-
-        //[HttpPost("forgot-password")]
-        //public IActionResult ForgotPassword(ResetPasswordDTO dto)
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost("reset-password")]
-        //public async Task<IActionResult > ResetPassword([FromBody] ResetPasswordDTO)
-        //{
-        //    if (!ModelState.IsValid) { 
-
-        //        return BadRequest(ModelState);
-
-        //    }
-
-
-        //}
 
         [HttpGet("forgot-password")]
         public IActionResult ForgotPassword()
@@ -183,6 +164,24 @@ namespace UserManagement.Controllers
             ViewBag.Token = token;
             return View();
         }
+
+
+
+        [HttpGet("create-password")]
+        public IActionResult CreatePassword(string email, string token)
+        {
+            ViewBag.Email = email;
+            ViewBag.Token = token;
+            return View();
+        }
+
+        //[HttpPost("create-password")]
+        //public async Task<IActionResult> CreatePassword([FromBody] ForgotPasswordDTO dto)
+        //{
+        //    var result = await this._authService.SendResetEmailAsync(dto.Email);
+        //    return Ok(result);
+        //}
+
 
         [HttpPost("forgot")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO dto)
