@@ -10,7 +10,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "UserManagement.Controllers.UserController",
+    "ContainingType": "UserManagement.Controllers.UserAPIController",
     "Method": "AllUsers",
     "RelativePath": "api/user/AllUsers",
     "HttpMethod": "GET",
