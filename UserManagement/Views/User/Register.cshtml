@@ -81,28 +81,28 @@
 
     <form id="registerForm">
         <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input type="text" id="firstName" required>
+            <label for="firstName">First Name <span style="color:red">*</span></label>
+            <input type="text" id="firstName" class="form-control" required />
         </div>
 
-        <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" required>
+        <div class="form-group mt-3">
+            <label for="lastName">Last Name <span style="color:red">*</span></label>
+            <input type="text" id="lastName" class="form-control" required />
         </div>
 
-        <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input type="date" id="dob" required>
+        <div class="form-group mt-3">
+            <label for="dob">Date of Birth <span style="color:red">*</span></label>
+            <input type="date" id="dob" class="form-control" required />
         </div>
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" required>
+        <div class="form-group mt-3">
+            <label for="email">Email <span style="color:red">*</span></label>
+            <input type="email" id="email" class="form-control" required />
         </div>
 
-        <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" required>
+        <div class="form-group mt-3">
+            <label for="gender">Gender <span style="color:red">*</span></label>
+            <select id="gender" class="form-control" required>
                 <option value="">-- Select Gender --</option>
                 <option>Male</option>
                 <option>Female</option>
@@ -110,20 +110,22 @@
             </select>
         </div>
 
-        @* <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" required>
+        @* <div class="form-group mt-3">
+            <label for="password">Password <span style="color:red">*</span></label>
+            <input type="password" id="password" class="form-control" required />
         </div> *@
 
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-primary mt-4 w-100">Register</button>
+
         <div style="text-align:center; margin-top: 1rem;">
             Already have an account?
             <a href="http://127.0.0.1:5020/api/user/login" style="color: #007bff; text-decoration: none;">Login</a>
         </div>
     </form>
 
-    <div id="alertBox" class="alert"></div>
+    <div id="alertBox" class="alert mt-3"></div>
 </div>
+
 
 <script>
     document.getElementById('registerForm').addEventListener('submit', async function (e) {
